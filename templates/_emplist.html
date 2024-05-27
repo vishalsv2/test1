@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="relative" style="display: flex; align-items: flex-end;">
+    <div style="flex-grow: 1; font-weight:600;" class="pb-4 ms-3">
+        Home / <span class="text-blue-600">All employee</span>
+    </div>
+    <a href="/users/register" class="btn mx-5 btn-transfer border rounded-lg  p-2" style="background: transparent; color: blue; border: 1px solid blue;"><i class="bi bi-person-plus-fill me-2"></i> Add Employee</a>
+</div>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+    <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" style="width: 100%;" >
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-center">
+                    Name
+                </th>
+                <th scope="col" class="px-6 py-3 text-center">
+                    Position
+                </th>
+                <th scope="col" class="px-6 py-3  text-center">
+                    Employee ID
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Status
+                </th>
+                <th scope="col" class="px-6 py-3 text-center">
+                    Create Date
+                </th>
+                <th scope="col" class="px-6 py-3 text-center">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if employees %}
+            {% for employee in employees %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td class="px-6 py-4">
+                    <div style="display: flex; align-items: center;">
+                        <!-- employee profile needed -->
+                        <p>{{ employee.username }}</p>
+                    </div>
+                    
+                </td>
+                <td class="px-6 py-4">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        {{ employee.position }}
+                    </div>
+                </td>
+                <td class="px-6 py-4">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        {{ employee.employee_id }}
+                    </div>
+                </td>
+                <td class="px-6 py-4">
+                    
+                    {% if employee.active %}
+                    <div class="flex items-center">
+                        <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Active
+                    </div>
+                    {% else %}
+                    <div class="flex items-center">
+                        <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div> Inactive
+                    </div>
+                    {% endif %}
+                    <!-- {{ 'Active' if employee.active else 'Inactive' }} -->
+                </td>
+                <td class="px-6 py-4">
+                    {{ employee.creation_time }} <!-- create date needed-->
+                <td class="px-6 py-4">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <a href="#" style="border: 1px solid #313D4F; padding: 7px;" class="me-2">
+                            <i class="bi bi-pencil-square me-2"></i> Edit
+                        </a>
+                        <button style="border: 1px solid #313D4F; padding: 7px;">
+                            <i class="bi bi-pencil-square me-2"></i> Delete
+                    </div>
+                </td>
+                
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                No Employees found!
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

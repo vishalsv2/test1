@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<main>
+    <div>
+        <div
+            style=" background-color: #313D4F; border-top-left-radius: 20px; border-top-right-radius: 20px; padding: 10px">
+            <h2 style="color: white; margin-left: 10px; font-weight: 700;">User Profile</h2>
+        </div>
+        <form action="">
+            <div
+                style="display: flex; padding-left: 150px; padding-right: 150px; background-color: #212A33; gap: 30px; padding-top: 80px; padding-bottom: 80px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
+
+                <div style="display: flex; flex-direction:column ; border: 1px solid #313D4F; padding: 50px;">
+                    <!-- user profile -->
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        <img src="https://th.bing.com/th/id/OIP.fA-1hGUxOEpYKN3dyAE_QgHaHa?w=216&h=216&c=7&r=0&o=5&pid=1.7"
+                            alt="profile" style="border-radius: 50%; height: 200px; width: 200px;">
+                    </div>
+                    <!-- profile photo upload -->
+                    <div style="margin-top: 30px;">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                style="font-weight: 700; font-size: 15px; margin-left: 2px;" for="user_avatar">Upload
+                                file</label>
+                            <input name="file" accept="image/*"
+                                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                aria-describedby="user_avatar_help" id="user_avatar" type="file">
+                            <div class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="user_avatar_help">Ensure your
+                                profile picture has equal height and width .</div>
+                        </div>
+                    </div>
+                    <!-- Toggle button -->
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #313D4F; padding: 10px; border-radius: 10px; margin-top: 30px;">
+                        <div>
+                            <span style="color: white; font-weight: 700;">Active Status</span>
+                        </div>
+                        <div id="toggleContainer">
+                            <label class="switch">
+                                <input type="checkbox" id="activeToggle" style="width: 80px;">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    style="display: flex; flex-direction:column ; background-color: #212A33; border: 1px solid #313D4F; padding: 50px">
+                    <div class="flex flex-col items-center px-6 py-8 mx-auto lg:py-0">
+
+                        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                            <div>
+                                <div style="margin-bottom: 10px;">
+                                    <label for="username"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                        style="font-weight: 600;">Name</label>
+                                    <input type="text" name="username" id="username"
+                                        style="min-width:250px; width: 350px; max-width: 350px;"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Username" required="">
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <label for="email-id"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                        style="font-weight: 600;">Email ID</label>
+                                    <input type="email" name="email-id" id="email-id" placeholder="selfmade@gmail.com"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        required="">
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <label for="employee-id"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                        style="font-weight: 600;">Employee ID</label>
+                                    <input type="employee-id" name="employee-id" id="employee-id"
+                                        placeholder="Employee id"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        required="">
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <label for="large-input"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                        style="font-weight: 600;">Bio</label>
+                                    <input type="text" id="large-input"
+                                        class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <div>
+                                    <button
+                                        style="background-color: #4880FF; color: white; border-radius: 20px; width: 120px; height: 50px;">
+                                        Save
+                                    </button>
+                                </div>
+                                <div>
+                                    <button
+                                        style="background-color: red; color: white; border-radius: 20px; width: 120px; height: 50px;">
+                                        <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Logout
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</main>
+
+<script>
+    window.onload = function () {
+        // Fetch the current active status from the server and update the UI accordingly
+        fetch('/users/is_active')
+            .then(response => response.json())
+            .then(data => {
+                const isActive = data.active;
+                const toggle = document.getElementById('activeToggle');
+                toggle.checked = isActive; // Set the toggle state
+
+                // Add event listener for the toggle
+                toggle.addEventListener('change', toggleActiveStatus);
+            });
+    };
+
+    function toggleActiveStatus() {
+        const toggle = document.getElementById('activeToggle');
+        const isActive = toggle.checked;
+
+        // Determine the appropriate endpoint based on the current state
+        const url = isActive ? '/users/activated' : '/users/deactivated';
+
+        fetch(url, {
+            method: 'POST',
+            // Include other settings like headers if needed, for example, for CSRF tokens
+        }).then(response => {
+            if (!response.ok) {
+                console.error('Failed to toggle active status');
+                // Revert the toggle switch if the server-side update fails
+                toggle.checked = !isActive;
+                // Handle errors or non-OK responses here, perhaps display a message to the user
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            // Revert the toggle switch if there's a network error or other exceptions
+            toggle.checked = !isActive;
+            // Handle network errors or other exceptions here, perhaps display a message to the user
+        });
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,4 @@
+/manages
+__pycache__
+virt/
+src/config.json

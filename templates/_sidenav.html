@@ -1,0 +1,51 @@
+<section class='side-panel'>
+    <header>
+        <div class='title'>
+            <h2 style="font-size: 75px; margin-bottom: -20px;"><i class="fa-solid fa-headset text-white"></i></h2>
+            <h2><span>Support</span></h2>
+        </div>
+    </header>
+    <nav>
+        <ul>
+            <li>
+                <a href='/dashboard' title='Dashboard' class="side-navbar-support">
+                    <span style="font-size: 17px; font-weight: 600;">Dashboard</span>
+                    <i class='fa fa-compass' style="font-size: 20px;"></i>
+                </a>
+            </li>
+            {% if session['admin']%}
+            <li>
+                <a href='/v1/api/users/emplist' title='employee' class="side-navbar-support">
+                    <span style="font-size: 17px; font-weight: 600;">Employee List</span>
+                    <i class='fa fa-list' style="font-size: 20px;"></i>
+                </a>
+            </li>
+            {% else %}
+            <li>
+                <a href='/v1/api/users/pending' title='employy' class="side-navbar-support">
+                    <span style="font-size: 17px; font-weight: 600;">Pending</span>
+                    <i class='fa fa-envelope' style="font-size: 20px;"></i>
+                </a>
+            </li>
+            {% endif %}
+            <!-- <li>
+                <a href='/settings' title='Settings' class="side-navbar-support">
+                    <span style="font-size: 17px; font-weight: 600;">Settings</span>
+                    <i class='fa fa-sliders' style="font-size: 20px;"></i>
+                </a>
+            </li> -->
+            <li>
+                <a href='/v1/api/users/profile' title='profile' class="side-navbar-support">
+                    <span style="font-size: 17px; font-weight: 600;">Profile</span>
+                    <i class='fa fa-edit' style="font-size: 20px;"></i>
+                </a>
+            </li>
+            <li>
+                <a href='/v1/api/users/logout' title='logout' class="side-navbar-support-logout">
+                    <span style="font-size: 17px; font-weight: 600;">logout</span>
+                    <i class='fa fa-arrow-right' style="font-size: 20px;"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</section>

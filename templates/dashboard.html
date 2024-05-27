@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block content %}
+{% if session['admin'] %}
+<div class="relative mb-3" style="display: flex; align-items: flex-end;">
+    <div style="flex-grow: 1; font-weight:600;" class="pb-4 ms-3"> 
+        Home / <span class="text-blue-600">All Tickets</span>
+    </div>
+    <div style="display: flex;" class="">
+        <select id="bulk-assign-agent" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 hover:cursor-pointer">
+            <option value="">Assign to</option>
+            {% for agent in employees %}
+            {% if agent.active and agent.employee_id != session['employee_id'] %}
+                <option value="{{ agent.employee_id }}">{{ agent.username }}</option>
+            {% endif %}
+            {% endfor %}
+        </select>   
+        <button class="btn mx-5 btn-transfer border rounded-lg w-full p-2" id="bulk-assign-button" style="background: transparent; color: blue; border: 1px solid blue;"><i class="fa-solid fa-right-left mx-2"></i>Assign</button>
+    </div>
+</div>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg" style="background-color: #313D4F;">
+    <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" style="width: 100%;" >
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th class="text-left p-3 block md:table-cell">
+                    <input type="checkbox" id="select-all" class="checkbox checkbox-primary w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"  style="border-radius: 5px;">
+                </th>
+                <th scope="col" class="px-6 py-3 text-center">
+                    Ticket Id
+                </th>
+                <th scope="col" class="px-6 py-3 text-center">
+                    Telegram User
+                </th>
+                <th scope="col" class="px-6 py-3 text-center">
+                    Query
+                </th>
+                <th scope="col" class="px-6 py-3 text-center">
+                    Assigned
+                </th>
+                <th scope="col" class="px-6 py-3 text-center">
+                    Status
+                </th>
+                <th scope="col" class="px-6 py-3 text-center">
+                    Created Date
+                </th>
+                <!-- <th scope="col" class="px-6 py-3 text-center">
+                    Due Date
+                </th>  -->
+                <th scope="col" class="px-6 py-3 text-center">
+                    Action
+                </th>      
+                           
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td class="p-3 block md:table-cell">
+                    <input type="checkbox" class="checkbox checkbox-primary w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" 
+                    value="{{ ticket.ticket_id }}" data-ticket-id="{{ ticket.ticket_id }}" style="border-radius: 5px;">
+                </td>
+                <td class="px-6 py-4">
+                    <div style="display: flex; align-items: center;">
+                        <!-- client profile -->
+                        <p>{{ ticket.ticket_id }}</p>
+                    </div>
+                </td>
+                <td class="px-6 py-4">
+                    <div style="display: flex; align-items: center;">
+                        <!-- client profile -->
+                        <p>{{ ticket.username }}</p>
+                    </div>
+                </td>
+                <td class="px-6 py-4">
+                    {{ ticket.query }}
+                </td>
+                <td class="px-6 py-4">
+                    <div style="display: flex; align-items: center;">
+                        <!-- client profile -->
+                        <p>{{ ticket.assigned_to }}</p>
+                    </div>
+                </td>
+                <td class="px-6 py-4">
+                    <!-- ticket status -->
+                    {% if ticket.status == "closed" %}
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <p class="font-medium text-red-600 dark:text-red-500" style="font-weight: 700;">Closed</p>
+                    </div>
+                    {% elif ticket.status == "assigned"%}
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <p class="font-medium text-yellow-600 dark:text-yellow-500" style="font-weight: 700;">Assigned</p>
+                    </div>
+                    {% elif ticket.status == "progress" %}
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <p class="font-medium text-green-600 dark:text-green-500" style="font-weight: 700;">Progress</p>
+                    </div>
+                    {% elif ticket.status == "pending" %}
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <p class="font-medium text-purple-600 dark:text-purple-500" style="font-weight: 700;">Pending</p>
+                    </div>
+                    {% else %}
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <p class="font-medium text-red-600 dark:text-red-500" style="font-weight: 700;">Open</p>
+                    </div>
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4">
+                    <!-- ticket issued at -->
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        {{ ticket.created_at }}
+                    </div>
+                </td>
+                <td class="px-6 py-4">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <a href = "#" style="border: 1px solid #313D4F; padding: 7px;" class="me-2">
+                            <i class="bi bi-pencil-square me-2"></i> Edit
+                        </a>
+                        <button style="border: 1px solid #313D4F; padding: 7px;">
+                            <i class="bi bi-pencil-square me-2"></i> Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+        <div style="display: flex; align-items: center; justify-content: space-between; overflow: hidden;" class="my-2">
+        <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto mx-5">Showing <span class="font-semibold text-gray-900 dark:text-white">{{ current_page }}</span> of <span class="font-semibold text-gray-900 dark:text-white">{{ total_pages }}</span></span>
+        <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between p-2 mx-5" aria-label="Table navigation">
+            <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+                {% if total_pages==1 %}
+                <li>
+                    <a href="{{ url_for('home.dashboard', page=current_page) }}" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {{ 'cursor-not-allowed opacity-50' if current_page <= 1 else 'hover:bg-gray-200' }}">Previous</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{{ url_for('home.dashboard', page=current_page-1) }}" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {{ 'cursor-not-allowed opacity-50' if current_page <= 1 else 'hover:bg-gray-200' }}">Previous</a>
+                </li>
+                {% endif %}
+                {% for p in range(1, total_pages + 1) %}
+                <li>
+                    <a href="{{ url_for('home.dashboard', page=p) }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white  {{ 'bg-blue-600 text-white' if p == current_page else 'bg-white text-gray-700 hover:bg-gray-200' }}">{{ p }}</a>
+                </li>
+                {% endfor %}
+                {% if total_pages==current_page %}
+                <li>
+                    <a href="{{ url_for('home.dashboard', page=current_page) }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {{ 'cursor-not-allowed opacity-50' if current_page >= total_pages else 'hover:bg-gray-200' }}">Next</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{{ url_for('home.dashboard', page=current_page+1) }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {{ 'cursor-not-allowed opacity-50' if current_page >= total_pages else 'hover:bg-gray-200' }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    
+    </div>
+    </div>
+
+{% else %}
+{% include "_empdash.html" %}
+{% endif %}
+
+
+
+{% endblock %}
+
+
+
+<!-- admin das -->

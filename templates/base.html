@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% include '_head.html' %}
+
+<body>
+    {% include '_sidenav.html' %}
+
+    <section class='head-panel'>
+        {% include '_header.html' %}
+
+        <main style="margin-top: a;">
+            <div id="content" style="width: 100%; margin-top: 10px;">
+                {% block content %} {% endblock %}
+            </div>
+        </main>
+    </section>
+    {% include '_flash.html' %}
+
+    {% include '_script.html' %}
+
+</body>
+
+</html>

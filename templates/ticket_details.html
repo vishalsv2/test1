@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="relative mb-3" style="display: flex; align-items: flex-end;">
+	<div style="flex-grow: 1; font-weight:600;" class="pb-4 ms-3">
+		Home / <span class="text-blue-600">Chat</span>
+	</div>
+	<div style="display: flex;" class="">
+		<select id="assign-agent"
+			class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 hover:cursor-pointer">
+			<option value="">Transfer to</option>
+			{% for agent in employees %}
+			{% if agent.active and agent.employee_id != session['employee_id'] %}
+				<option value="{{ agent.employee_id }}">{{ agent.username }}</option>
+			{% endif %}
+			{% endfor %}
+		</select>
+		<button  id="transfer-button" class="btn mx-5 btn-transfer border rounded-lg w-full p-2"
+			style="background: transparent; color: blue; border: 1px solid blue;"><i class="fa-solid fa-right-left"></i>
+			Transfer
+		</button>
+	</div>
+</div>
+<div class="flex flex-col md:flex-row max-h-screen bg-gray-100">
+	<!-- Left Column: Ticket Details -->
+	<div class="md:w-1/3 p-8 shadow-lg"
+		style="background-color: #323D4E; border-top-left-radius: 20px; border-bottom-left-radius: 20px;">
+		<div style="background-color: #323D4E; padding: 1rem;">
+			<h2 class="text-3xl font-bold mb-6" style="color: #FFFFFF; margin: 0;">Ticket Details</h2>
+		</div>
+
+		<div class="space-y-4">
+			<div style="background-color: #212A33;" class="p-5">
+				<div style="border-bottom: 1px solid #323D4E;">
+					<h4 class="text-lg font-semibold" style="color: #FFFFFF;">Ticket ID:</h4>
+					<p class="text-gray-600 my-3" style="color: #FFFFFFA6;" id="ticketId">{{ ticket.ticket_id }}</p>
+				</div>
+				<div style="border-bottom: 1px solid #323D4E;">
+					<h4 class="text-lg font-semibold" style="color: #FFFFFF;">User ID:</h4>
+					<p class="text-gray-600 my-3" style="color: #FFFFFFA6;">{{ ticket.user_id }}</p>
+				</div>
+				<div style="border-bottom: 1px solid #323D4E;">
+					<h4 class="text-lg font-semibold" style="color: #FFFFFF;">Issue:</h4>
+					<p class="text-gray-600 my-3" style="color: #FFFFFFA6;">{{ ticket.query }}</p>
+				</div>
+				<div style="border-bottom: 1px solid #323D4E;">
+					<h4 class="text-lg font-semibold" style="color: #FFFFFF;">Status:</h4>
+					<p class="text-gray-600 my-3" style="color: #FFFFFFA6;">{{ ticket.status }}</p>
+				</div>
+				<div style="border-bottom: 1px solid #323D4E;">
+					<h4 class="text-lg font-semibold" style="color: #FFFFFF;">Created At:</h4>
+					<p class="text-gray-600 my-3" style="color: #FFFFFFA6;">{{ ticket.created_at }}</p>
+				</div>
+				<div style="border-bottom: 1px solid #323D4E;">
+					<h4 class="text-lg font-semibold" style="color: #FFFFFF;">Last Updated At:</h4>
+					<p class="text-gray-600 my-3" style="color: #FFFFFFA6;">{{ ticket.updated_at }}</p>
+				</div>
+				<div style="border-bottom: 1px solid #323D4E;">
+					<h4 class="text-lg font-semibold" style="color: #FFFFFF;">Uploaded Files:</h4>
+					<!-- Files list -->
+					<div class="my-3" style="height: 70px">
+						<ul class="list-disc pl-5 text-blue-600">
+							{% for file in files %}
+							<!-- Placeholder for files -->
+							<li><a href="{{ url_for('files.stream_fs', filename=file.filename) }}" target="_blank"
+									class="text-blue-600 hover:underline">{{ file.metadata.original_filename }}</a>
+							</li>
+							{% endfor %}
+						</ul>
+					</div>
+
+				</div>
+				<button type="button" id="closeTicketButton" ticket-id="{{ ticket.ticket_id }}"
+					class="btn btn-block mt-3" style="background-color: #FFFFFF75; color: #FFF;">Close Ticket
+				</button>
+
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Right Column: Live Chat UI -->
+	<div class="flex-grow bg-white p-8 rounded-r-lg shadow-lg live_chat" style="background-color: #212A33;">
+		<div>
+			<h2 class="text-3xl font-bold mb-6 text-white">Live Chat</h2>
+		</div>
+
+		<!-- Chat container with flexbox -->
+		<div class="flex flex-col flex-grow"
+			style="height: 650px; background-color: #323D4E; border-radius: 20px; overflow-y: auto; padding-top: 20px; padding-left: 20px; padding-right: 20px;">
+			<!-- Chat messages -->
+			<div class="flex flex-col overflow-y-auto mb-4"
+				style="width: 100%; height: 100%;flex-direction: column-reverse">
+				<div class="flex-grow items-start gap-2.5">
+					<div class="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 dark:bg-gray-700 my-3"
+						style="background-color: #212A33; width: 100%; border-radius: 20px;">
+						<div class="flex items-center space-x-2 rtl:space-x-reverse mt-2">
+							<span class="text-sm font-semibold text-gray-900 dark:text-white">Receiver</span>
+							<span class="text-sm font-normal text-gray-500 dark:text-gray-400">10 min ago</span>
+						</div>
+						<p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">Some sort of problemm</p>
+					</div>
+					<div class="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 dark:bg-gray-700 my-3"
+						style="background-color: #212A33; width: 100%; border-radius: 20px;">
+						<div class="flex items-center space-x-2 rtl:space-x-reverse mt-2 justify-end">
+							<span class="text-sm font-semibold text-gray-900 dark:text-white">Sender</span>
+							<span class="text-sm font-normal text-gray-500 dark:text-gray-400">10 min ago</span>
+						</div class="flex items-center space-x-2 rtl:space-x-reverse mt-2 text-right">
+						<p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white text-right">Some sort of
+							problemm asdfhaskdfhkfakjhdkfsdf</p>
+					</div>
+
+
+					{% for message in messages %}
+					<div class="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 dark:bg-gray-700 my-3"
+						style="background-color: #212A33; width: 100%; border-radius: 20px;">
+						<div class="flex items-center space-x-2 rtl:space-x-reverse mt-2">
+							<span class="text-sm font-semibold text-gray-900 dark:text-white">{{ message.sender
+								}}:</span>
+							<span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{
+								message.last_interaction}}</span>
+						</div>
+						<p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">{{ message.text }}</p>
+					</div>
+					{% endfor %}
+				</div>
+
+
+				<!-- Your chat messages here -->
+				{% for message in messages %}
+				<div class="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 dark:bg-gray-700 my-3"
+					style="background-color: #212A33; width: 100%; border-radius: 20px;">
+					<div class="flex items-center space-x-2 rtl:space-x-reverse mt-2">
+						<span class="text-sm font-semibold text-gray-900 dark:text-white">{{ message.sender }}:</span>
+						<span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{
+							message.last_interaction}}</span>
+					</div>
+					<p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">{{ message.text }}</p>
+				</div>
+				{% endfor %}
+			</div>
+
+			<!-- Input field at the bottom -->
+			<form id="chat-form" method="POST" enctype="multipart/form-data">
+				<div class="flex items-center px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-700" style="width: 100%;">
+					<button type="button" id="file-upload-btn"
+						class="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+						<svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+							viewBox="0 0 20 18">
+							<path fill="currentColor"
+								d="M13 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM7.565 7.423 4.5 14h11.518l-2.516-3.71L11 13 7.565 7.423Z" />
+							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+								d="M18 1H2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z" />
+							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+								d="M13 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM7.565 7.423 4.5 14h11.518l-2.516-3.71L11 13 7.565 7.423Z" />
+						</svg>
+						<span class="sr-only">Upload image</span>
+					</button>
+					<input type="file" id="file-upload" name="attachment" class="hidden" />
+					<div id="file-upload-data" data-url="{{ url_for('files.upload_bucket') }}"
+						ticket-id="{{ ticket.ticket_id }}" style="display: none;"></div>
+					<input type="hidden" id="uploaded-image-url" name="uploaded_image_url" value="" />
+					<emoji-picker id="emoji-picker" style="display: none;"></emoji-picker>
+					<textarea id="chat" rows="1" name="message"
+						class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+						placeholder="Your message..."></textarea>
+					<button type="submit" id="send_message"
+						class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
+						<svg class="w-5 h-5 rotate-90 rtl:-rotate-90" aria-hidden="true"
+							xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+							<path
+								d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z" />
+						</svg>
+						<span class="sr-only">Send message</span>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- Message input -->
+	<!-- Image preview section -->
+
+</div>
+
+<!-- Message input -->
+<!-- Image preview section -->
+
+</div>
+</div>
+
+{% endblock %}
